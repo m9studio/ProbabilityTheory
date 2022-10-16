@@ -35,6 +35,6 @@ namespace ru.m9studio.ProbabilityTheory.New
         /// Constructor.
         /// </summary>
         /// <param name="n">The final number of anything.</param>
-        public Permutation(int n) : base(n, 1) { }
+        public Permutation(int n) : base(n, n) { }
     }
 }
