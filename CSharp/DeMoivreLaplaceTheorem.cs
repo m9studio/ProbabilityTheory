@@ -44,7 +44,8 @@ namespace ru.m9studio.ProbabilityTheory
                     throw new Exception("The value of 'n' must be greater than 0 and greater than the value of 'k';");
                 else
                 {
-                    EventHandler e = new EventHandler(_n, value);
+                    EventHandlerCancelled e = new EventHandlerCancelled();
+                    EventEdit_n?.Invoke(this, n, value, e);
                     if (!e.Cancelled)
                         _n = value;
                 }
@@ -65,7 +66,8 @@ namespace ru.m9studio.ProbabilityTheory
                     throw new Exception("The value of 'k' must be from 0 to the value of 'n' inclusive;");
                 else
                 {
-                    EventHandler e = new EventHandler(_k, value);
+                    EventHandlerCancelled e = new EventHandlerCancelled();
+                    EventEdit_k?.Invoke(this, k, value, e);
                     if (!e.Cancelled)
                         _k = value;
                 }
@@ -89,7 +91,8 @@ namespace ru.m9studio.ProbabilityTheory
                     throw new Exception("The value of 'p' must be from 0 to 1;");
                 else
                 {
-                    EventHandler e = new EventHandler(_p, value);
+                    EventHandlerCancelled e = new EventHandlerCancelled();
+                    EventEdit_p?.Invoke(this, p, value, e);
                     if (!e.Cancelled)
                         _p = value;
                 }
@@ -113,7 +116,8 @@ namespace ru.m9studio.ProbabilityTheory
                     throw new Exception("The value of 'p' must be from 0 to 1;");
                 else
                 {
-                    EventHandler e = new EventHandler(q, value);
+                    EventHandlerCancelled e = new EventHandlerCancelled();
+                    EventEdit_q?.Invoke(this, q, value, e);
                     if (!e.Cancelled)
                         _p = 1 - value;
                 }
@@ -148,16 +152,11 @@ namespace ru.m9studio.ProbabilityTheory
         /// P = 1 / √(npq) * F(x)
         /// </remarks>
         public double P { get => Fx / npq; }
-        /// <summary>
-        /// Delegate for event handling.
-        /// </summary>
-        /// <param name="e">Event handler.</param>
-        /// <param name="obj">The object in which the changes should occur.</param>
-        public delegate void Event(EventHandler e, DeMoivreLaplaceTheorem obj);
+        
         /// <summary>
         /// Data change event in the object.
         /// </summary>
-        public event Event? nEdit, kEdit, pEdit, qEdit;
+        public event DelegateEventDouble<DeMoivreLaplaceTheorem>? EventEdit_n, EventEdit_k, EventEdit_p, EventEdit_q;
         /// <summary>
         /// Constructor.
         /// </summary>

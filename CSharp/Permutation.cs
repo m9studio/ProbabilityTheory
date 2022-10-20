@@ -21,13 +21,12 @@ namespace ru.m9studio.ProbabilityTheory.New
         /// <remarks>
         /// c = n!;
         /// </remarks>
-        public override long c
-        {
+        public override long c {
             get
             {
                 long a = 1;
                 for (int i = 0; i < n; i++)
-                    a *= n - i;
+                    a *= a - i;
                 return a;
             }
         }
@@ -35,6 +34,7 @@ namespace ru.m9studio.ProbabilityTheory.New
         /// Constructor.
         /// </summary>
         /// <param name="n">The final number of anything.</param>
-        public Permutation(int n) : base(n, n) { }
+        public Permutation(int n) : base(n, 1) => EventEdit_m += m_EventHandler;
+        private void m_EventHandler (Combinatorics sender, int ValueOld, int ValueNew, EventHandlerCancelled e) => e.Cancel();
     }
 }

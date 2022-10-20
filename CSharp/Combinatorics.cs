@@ -33,7 +33,12 @@ namespace ru.m9studio.ProbabilityTheory
                 if (value < 0 || value < m)
                     throw new Exception("The value of 'n' must be greater than 0 and greater than or equal to 'm';");
                 else
-                    _n = value;
+                {
+                    EventHandlerCancelled e = new EventHandlerCancelled();
+                    EventEdit_n?.Invoke(this, n, value, e);
+                    if (!e.Cancelled)
+                        _n = value;
+                }
             }
         }
         /// <summary>
@@ -50,7 +55,12 @@ namespace ru.m9studio.ProbabilityTheory
                 if(value < 0 || value > n)
                     throw new Exception("The value of 'm' must be greater than 0 and less than or equal to 'n';");
                 else
-                    _m = value;
+                {
+                    EventHandlerCancelled e = new EventHandlerCancelled();
+                    EventEdit_m?.Invoke(this, m, value, e);
+                    if (!e.Cancelled)
+                        _m = value;
+                }
             }
         }
         /// <summary>
@@ -63,5 +73,9 @@ namespace ru.m9studio.ProbabilityTheory
             this.n = n;
             this.m = m;
         }
+        /// <summary>
+        /// Data change event in the object.
+        /// </summary>
+        public event DelegateEventInt<Combinatorics>? EventEdit_m, EventEdit_n;
     }
 }

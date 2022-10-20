@@ -31,9 +31,9 @@ namespace ru.m9studio.ProbabilityTheory
                 a += b.p;
             return a;
         }
-        private void data_pEvent(EventHandler e, DiscreteRandomVariableData obj)
+        private void data_pEvent(DiscreteRandomVariableData obj, double OldValue, double NewValue, EventHandlerCancelled e)
         {
-            if (data_pCheck(e.New - e.Old) > 1)
+            if (data_pCheck(NewValue - OldValue) > 1)
             {
                 e.Cancel();
                 throw new Exception("Array of 'p' values greater than 1;");
@@ -61,9 +61,14 @@ namespace ru.m9studio.ProbabilityTheory
         {
             if (data_pCheck(data.p) > 1)
                 return false;
-            this.data.Add(data);
-            data.pEdit += data_pEvent;
-            return true;
+            EventHandlerCancelled e = new EventHandlerCancelled();
+            EventAdd?.Invoke(this, data, Length, e);
+            if (!e.Cancelled)
+            {
+                this.data.Add(data);
+                data.EventEdit_p += data_pEvent;
+            }
+            return !e.Cancelled;
         }
         /// <summary>
         /// Method for deleting an object from a collection.
@@ -75,9 +80,14 @@ namespace ru.m9studio.ProbabilityTheory
             if(index >= this.data.Count || index < 0)
                 return false;
             DiscreteRandomVariableData a = data[index];
-            a.pEdit -= data_pEvent;
-            data.RemoveAt(index);
-            return true;
+            EventHandlerCancelled e = new EventHandlerCancelled();
+            EventAdd?.Invoke(this, a, Length, e);
+            if (!e.Cancelled)
+            {
+                a.EventEdit_p -= data_pEvent;
+                data.RemoveAt(index);
+            }
+            return !e.Cancelled;
         }
         /// <summary>
         /// Collection Length.
@@ -119,14 +129,6 @@ namespace ru.m9studio.ProbabilityTheory
         /// </remarks>
         public double Gx { get => Math.Sqrt(Dx); }
         /// <summary>
-        /// Constructor.
-        /// </summary>
-        public DiscreteRandomVariable() { }
-
-
-
-
-        /// <summary>
         /// Method of the IEnumerable interface.
         /// </summary>
         /// <returns></returns>
@@ -142,5 +144,9 @@ namespace ru.m9studio.ProbabilityTheory
         {
             return ((IEnumerable)data).GetEnumerator();
         }
+        /// <summary>
+        /// Data change event in the object.
+        /// </summary>
+        public event DelegateEventVoid<DiscreteRandomVariable, DiscreteRandomVariableData>? EventAdd, EventRemove;
     }
 }

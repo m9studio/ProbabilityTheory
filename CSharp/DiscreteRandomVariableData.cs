@@ -20,8 +20,8 @@ namespace ru.m9studio.ProbabilityTheory
             get => _x;
             set
             {
-                EventHandler e = new EventHandler(_x, value);
-                pEdit?.Invoke(e, this);
+                EventHandlerCancelled e = new EventHandlerCancelled();
+                EventEdit_x?.Invoke(this, x, value, e);
                 if (!e.Cancelled)
                     _x = value;
                     
@@ -41,23 +41,17 @@ namespace ru.m9studio.ProbabilityTheory
                     throw new Exception("The value of 'p' must be from 0 to 1;");
                 else
                 {
-                    EventHandler e = new EventHandler(_p, value);
-                    pEdit?.Invoke(e, this);
+                    EventHandlerCancelled e = new EventHandlerCancelled();
+                    EventEdit_p?.Invoke(this, p, value, e);
                     if (!e.Cancelled)
                         _p = value;
                 }
             }
         }
         /// <summary>
-        /// Delegate for event handling.
-        /// </summary>
-        /// <param name="e">Event handler.</param>
-        /// <param name="obj">The object in which the changes should occur.</param>
-        public delegate void Event(EventHandler e, DiscreteRandomVariableData obj);
-        /// <summary>
         /// Data change event in the object.
         /// </summary>
-        public event Event? pEdit, xEdit;
+        public event DelegateEventDouble<DiscreteRandomVariableData>? EventEdit_p, EventEdit_x;
         /// <summary>
         /// Constructor.
         /// </summary>
