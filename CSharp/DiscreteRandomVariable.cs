@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace ru.m9studio.ProbabilityTheory
     /// An exception may occur if you change the values of 'p' in the DiscreteRandomVariableData objects, 
     /// and the sum of all 'p' contained in the internal collection is greater than 1.
     /// </exception>
-    public class DiscreteRandomVariable
+    public class DiscreteRandomVariable : IEnumerable<DiscreteRandomVariableData>
     {
         private List<DiscreteRandomVariableData> data = new List<DiscreteRandomVariableData>();
         private double data_pCheck() => data_pCheck(0);
@@ -71,8 +72,10 @@ namespace ru.m9studio.ProbabilityTheory
         /// <returns>Returns true or false, depending on whether the object was deleted;</returns>
         public bool Remove(int index)
         {
-            if(index >= this.data.Count)
+            if(index >= this.data.Count || index < 0)
                 return false;
+            DiscreteRandomVariableData a = data[index];
+            a.pEdit -= data_pEvent;
             data.RemoveAt(index);
             return true;
         }
@@ -119,5 +122,25 @@ namespace ru.m9studio.ProbabilityTheory
         /// Constructor.
         /// </summary>
         public DiscreteRandomVariable() { }
+
+
+
+
+        /// <summary>
+        /// Method of the IEnumerable interface.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<DiscreteRandomVariableData> GetEnumerator()
+        {
+            return ((IEnumerable<DiscreteRandomVariableData>)data).GetEnumerator();
+        }
+        /// <summary>
+        /// Method of the IEnumerable interface.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable)data).GetEnumerator();
+        }
     }
 }
