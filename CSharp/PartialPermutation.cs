@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ru.m9studio.ProbabilityTheory.New
+namespace m9studio.ProbabilityTheory.New
 {
     /// <summary>
     /// A combinatorics method for calculating partial permutation.
