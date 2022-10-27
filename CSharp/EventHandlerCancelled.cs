@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ru.m9studio.ProbabilityTheory
+namespace m9studio.ProbabilityTheory
 {
     /// <summary>
     /// Event Handler.
